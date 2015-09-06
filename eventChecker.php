@@ -14,7 +14,7 @@ for ($i = 0; $i < 59; ++$i) {
 		while($row = mysqli_fetch_assoc($results))
 		{
 			sendTextMessage($row["user"], $row["url"], $row["title"]);
-			predictNextPurchase($row["user"], $row["product"]);
+			predictNextPurchase($row["user"], $row["product"], true);
 		}
 	}
 	time_sleep_until($start + $i + 1);

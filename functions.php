@@ -19,7 +19,7 @@ function getAverageTimeBetweenScans($userID, $productID)
 	return (array_sum($scanTimesDifferences) / count($scanTimesDifferences));
 }
 
-function predictNextPurchase($userID, $productID)
+function predictNextPurchase($userID, $productID, $addScan = false)
 {
 	mysqli_select_db($_SESSION["dbConnection"],"calendar");
 	$result = mysqli_fetch_assoc(mysqli_query($_SESSION["dbConnection"], "SELECT * FROM events WHERE user = $userID AND product = $productID"));
@@ -29,7 +29,14 @@ function predictNextPurchase($userID, $productID)
 		mysqli_query($_SESSION["dbConnection"], "DELETE FROM events WHERE id = $eventID");
 	}
 
+
 	mysqli_select_db($_SESSION["dbConnection"],"ShopBuddy");
+
+	if($addScan)
+        {
+                mysqli_query($_SESSION["dbConnection"], "INSERT INTO Scans (quantity, productID, userID) VALUES (1, $productID, $userID)");
+        }
+
 	$result = mysqli_query($_SESSION["dbConnection"], "SELECT * FROM Scans WHERE productID = $productID AND userID = $userID  ORDER BY time DESC");
 
 	if(mysqli_num_rows($result) > 1)
