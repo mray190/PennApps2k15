@@ -5,7 +5,7 @@ include "server.php";
 function getAverageTimeBetweenScans($userID, $productID)
 {
 	mysqli_select_db($_SESSION["dbConnection"],"ShopBuddy");
-	$result = mysqli_query($_SESSION["dbConnection"], "SELECT * FROM Scans WHERE productID = $productID AND userID = $userID
+	$result = mysqli_query($_SESSION["dbConnection"], "SELECT * FROM Scans WHERE productID = $productID
 				ORDER BY time ASC");
 	$scanTimesArray = Array();
 	while($scan = mysqli_fetch_assoc($result)){
@@ -16,13 +16,13 @@ function getAverageTimeBetweenScans($userID, $productID)
 	{
 		$scanTimesDifferences[$i - 1] = $scanTimesArray[$i] - $scanTimesArray[$i - 1];
 	}
-	return (array_sum($scanTimesDifferences) / count($scanTimesDifferences));
+	return array_sum($scanTimesDifferences) / count($scanTimesDifferences);
 }
 
 function predictNextPurchase($userID, $productID)
 {
 	mysqli_select_db($_SESSION["dbConnection"],"calendar");
-	$result = mysqli_fetch_assoc(mysqli_query($_SESSION["dbConnection"], "SELECT * FROM events WHERE user = $userID AND product = $productID"));
+	$result = mysqli_fetch_assoc(mysqli_query($_SESSION["dbConnection"], "SELECT id FROM events WHERE user = $u	serID AND product = $productID"));
 	if($result["id"] != null)
 	{
 		$eventID = $result["id"];
@@ -42,15 +42,12 @@ function predictNextPurchase($userID, $productID)
 		$predictedDate = date("Y-m-d H:i:s" , $predictedNextPurchase);
 
 		$productInfo = mysqli_fetch_assoc(mysqli_query($_SESSION["dbConnection"], "SELECT * FROM Products WHERE id = $productID"));
+		echo(mysqli_error($_SESSION["dbConnection"]));
 		$url = $productInfo['url'];
 		$title = $productInfo['name'];
 
 		mysqli_select_db($_SESSION["dbConnection"],"calendar");
-		$titleS = mysqli_real_escape_string($_SESSION["dbConnection"], $title);
-
-		mysqli_query($_SESSION["dbConnection"], "INSERT into events (start, end, product, user, occurence, title, url) VALUES ('$predictedDate', '$predictedDate', $productID, $userID, $averageTimeBetweenScans, '$titleS', '$url')");
-		echo mysqli_error($_SESSION["dbConnection"]);
-		die();
+		mysqli_query($_SESSION["dbConnection"], "INSERT into events (start, end, product, user, occurence, title, url) VALUES ('$predictedDate', '$predictedDate', $productID, $userID, $averageTimeBetweenScans, '$title', '$url')");
 		$result = mysqli_fetch_assoc(mysqli_query($_SESSION["dbConnection"], "SELECT id FROM events WHERE product = $productID AND user = $userID"));
 		return $result["id"];
 	}

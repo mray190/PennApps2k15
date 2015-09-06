@@ -1,0 +1,51 @@
+.detBack {
+    background-image: url("assets/css/images/overlay.png"), url("assets/css/images/bg.jpg");
+    background-repeat: repeat, no-repeat;
+    background-size: auto, 100% 100%;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    color: #777777;
+}
+
+.detHead {
+	text-align: center;
+	padding-bottom: 40px;
+	font-size: 36;
+	border-radius: 10px;
+	background-image: url("assets/css/images/overlay.png"), url("assets/css/images/bg.jpg");
+	padding-top: 40px;
+}
+
+.detHead a {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.detSub {
+	text-align: center;
+	width: auto;
+	border-radius: 10px;
+	background-image: url("assets/css/images/overlay.png"), url("assets/css/images/bg.jpg");
+	padding: 15px;
+}
+
+.detSub a {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.detTable {
+	padding: 25px;
+}
+
+#detContainer {
+	width: 75%;
+	height: auto;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	background: #ffffff;
+	margin: auto;
+}

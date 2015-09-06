@@ -1,3 +1,8 @@
+<html>
+<head>
+    <link rel="stylesheet" href="custom.css"/>
+</head>
+<body class="detBack">
 <?php
 require_once 'lib/AmazonECS.class.php';
 include 'functions.php';
@@ -20,6 +25,28 @@ if (isset($response['Items']['Item']) ) {
             $url = "calendar/public/index.php?url=" . $result['DetailPageURL'];
             $name = $result['ItemAttributes']['Title'];
 
+
+            $similars = $client->responseGroup('Large')->similarityLookup($asin);
+            if (isset($similars['Items']['Item'])) {
+                echo "<div id='detContainer'>";
+                if (sizeof($similars['Items']['Item']) >= 5) {
+                    $betterURL = substr($url,strpos($url, "=")+1);
+                    echo "<table class='detTable'><tr><td class='detHead' colspan='5'><a href='$betterURL'>$name</a></td></tr><tr>";
+                } else {
+                    echo "<table class='detTable'><tr><td class='detHead' colspan='" . sizeof($similars['Items']['Item']) . "'><a href='$betterURL'>$name</a></td></tr><tr>";
+                }
+                $counter = 0;
+                foreach ($similars['Items']['Item'] as $similarItem) {
+                    $similarName = $similarItem['ItemAttributes']['Title'];
+                    $similarUrl = $similarItem['DetailPageURL'];
+                    if ($counter < 5) {
+                        echo "<td class='detSub'><a href='$similarUrl'>$similarName</a></td>";
+                    }
+                    $counter += 1;
+                }
+            }
+            echo "</tr></table></div>";
+
             //check that there is a URL. If not - no need to bother showing
             //this one as we only want linkable items
 			$servername = "127.0.0.1";
@@ -32,18 +59,16 @@ if (isset($response['Items']['Item']) ) {
 			$sqlResult = $mysqli->query("SELECT * FROM Products WHERE aID='$asin'");
 			if ($sqlResult->num_rows==0) {
 				$sql = "INSERT INTO Products(aID, url, name) VALUES ('$asin','$url','" . mysqli_real_escape_string($_SESSION["dbConnection"],"$name") . "')";
-                echo $sql;
 				$mysqli->query($sql);
 				$sqlResult = $mysqli->query("SELECT * FROM Products WHERE aID='$asin'");
 			}
 			$data = mysqli_fetch_assoc($sqlResult);
 			$intID = $data['id'];
-			$sql = "INSERT INTO Scans(`quantity`, `productID`, `userID`) VALUES (1,$intID,1)";
+			$sql = "INSERT INTO Scans(`quantity`, `productID`, `userID`) VALUES (1,$intID," . $_SESSION['userID'] . ")";
 			$mysqli->query($sql);
-            $eventID = predictNextPurchase(1, $intID);
-			$mysqli->close();
+            $eventID = predictNextPurchase($_SESSION['userID'], $intID);
 
-            header ("location: " . $result['DetailPageURL']);
+            // header ("location: " . $result['DetailPageURL']);
         }
     // }
 
@@ -51,3 +76,5 @@ if (isset($response['Items']['Item']) ) {
 
 }
 ?>
+</body>
+</html>

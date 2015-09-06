@@ -1,0 +1,23 @@
+<?php
+	include 'server.php';
+
+	if(isset($_POST))
+	{
+		switch ($_POST["clear"]) {
+			case '0':
+				mysqli_query($_SESSION["dbConnection"], "D");
+				break;
+			case '1':
+				mysqli_query($_SESSION["dbConnection"], "TRUNCATE TABLE Scans");
+				echo "hot potato";			
+	break;
+			case '2':
+				mysqli_select_db($_SESSION["dbConnection"], "calendar");
+				mysqli_query($_SESSION["dbConnection"], "TRUNCATE TABLE Scans");
+				mysqli_select_db($_SESSION["dbConnection"], "ShopBuddy");
+				break;
+			default:
+				# code...
+				break;
+		}
+	}

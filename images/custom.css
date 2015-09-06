@@ -1,0 +1,31 @@
+.detBack {
+    background-image: url("assets/css/images/overlay.png"), url("assets/css/images/bg.jpg");
+    background-repeat: repeat, no-repeat;
+    background-size: auto, 100% 100%;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    color: #777777;
+}
+
+.detHead {
+	text-align: center;
+	padding-bottom: 30px;
+}
+
+.detSub {
+	text-align: center;
+}
+
+.detTable {
+	padding: 25px;
+}
+
+#detContainer {
+	width: 75%;
+	height: 50%;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	background: #ff0000;
+	margin: auto;
+}

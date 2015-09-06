@@ -1,6 +1,5 @@
 <?php
 require '../vendor/autoload.php';
-include '../../server.php';
 
 
 
@@ -8,25 +7,17 @@ $app = new \Slim\Slim(array(
     'templates.path' => '../templates'
 ));
 
-
 $app->get('/api', function () use ($app) {
 // Get the start and end timestamps from request query parameters
-$startTimestamp = $app->request->get('start');
-$endTimestamp = $app->request->get('end');
+$startTimestamp = $app->request->get('time');
 
 try {
 // Open database connection
-$conn = new \PDO('mysql:host=127.0.0.1;dbname=calendar', 'root', 'root123');
+$conn = new \PDO('mysql:host=127.0.0.1;dbname=ShopBuddy', 'root', 'root123');
 
 // Query database for events in range
-if ($_SESSION['userID']==1){
-$stmt = $conn->prepare('SELECT * FROM events WHERE user = 1 ORDER BY start ASC');
-}
-else{
-	$stmt = $conn->prepare('SELECT * FROM events WHERE user = 2 ORDER BY start ASC');
-}
-$stmt->bindParam(':start', $startTimestamp, \PDO::PARAM_INT);
-$stmt->bindParam(':end', $endTimestamp, \PDO::PARAM_INT);
+$stmt = $conn->prepare('SELECT * FROM Scans ORDER BY time ASC');
+$stmt->bindParam(':time', $startTimestamp, \PDO::PARAM_INT);
 $stmt->execute();
 
 // Fetch query results

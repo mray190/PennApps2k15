@@ -1,0 +1,48 @@
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+
+
+<button type="button" id="clearProducts">Clear Products</button><br>
+<button type="button" id="clearScans">Clear Scans</button><br>
+<button type="button" id="clearEvents">Clear Events</button><br>
+<button type="button" id="goHome">Go Home</button>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#clearProducts").click(function(){
+        	$.ajax({
+            type: 'POST',
+            data: { clear: '0' },
+            url: 'clearData.php',
+            success: function(data) {
+                
+            }
+        });
+	   });
+		$("#clearScans").click(function(){
+        	$.ajax({
+            type: 'POST',
+            data: { clear: '1' },
+            url: 'clearData.php',
+            success: function(data) {
+
+            }
+        });
+	   });
+		$("#clearEvents").click(function(){
+        	$.ajax({
+            type: 'POST',
+            data: { clear: '2' },
+            url: 'clearData.php',
+            success: function(data) {
+               
+            }
+        });
+	   });
+		$("#goHome").click(function(){
+        	window.location.replace("home.php");
+        });
+	});
+
+</script>
+

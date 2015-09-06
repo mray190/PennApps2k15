@@ -40,7 +40,7 @@ $app->halt(500, $e->getMessage());
 });
 
 $app->get('/', function () use ($app) {
-    $app->render('calendar.html');
+    $app->render('calendar.php');
 });
 
 $app->run();

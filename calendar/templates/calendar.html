@@ -15,6 +15,7 @@
             (function ($) { 
                 $('#calendar').fullCalendar({
                     events: 'index.php/api',
+                    eventColor: '#0000ff',
                     eventDataTransform: function (rawEventData) {
                         return {
                             id: rawEventData.id,
@@ -26,6 +27,6 @@
                     }
                 });
             })(jQuery);
-        </script>
+        </script>        
     </body>
 </html>
